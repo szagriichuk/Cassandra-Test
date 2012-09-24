@@ -1,1 +1,1 @@
-to run -Dcassandra.config=cassandra.yaml
+to run -Dcassandra.config=file:///home/me/cassandra.yaml
