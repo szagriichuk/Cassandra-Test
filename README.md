@@ -1,0 +1,1 @@
+to run -Dcassandra.config=cassandra.yaml
