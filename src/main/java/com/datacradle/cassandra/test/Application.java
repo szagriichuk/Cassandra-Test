@@ -15,18 +15,17 @@ public class Application extends SpringApplication {
 
 
     public static void main(String[] args) throws IOException {
-
-        printStartFolder();
-        startEmbeddedCassandra(new Application());
+        Application application = new Application();
+        application.printStartFolder();
+        application.startEmbeddedCassandra();
     }
 
-    private static void printStartFolder() {
-
+    public void printStartFolder() {
         System.out.println(new File(".").getAbsolutePath());
     }
 
-    private static void startEmbeddedCassandra(Application application) throws IOException {
-        application.embeddedCassandraService.start();
+    public void startEmbeddedCassandra() throws IOException {
+        embeddedCassandraService.start();
     }
 
     @Override
