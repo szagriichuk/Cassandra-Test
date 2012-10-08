@@ -10,6 +10,7 @@ import java.io.IOException;
  * Hello world!
  */
 public class Application extends SpringApplication {
+
     @Autowired
     private EmbeddedCassandraService embeddedCassandraService;
 

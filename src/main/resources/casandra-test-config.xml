@@ -9,6 +9,7 @@
     <bean id="embeddedCassandraService" class="org.apache.cassandra.service.EmbeddedCassandraService"/>
 
     <bean class="com.datacradle.cassandra.test.DataCradleCasandra" name="dataCradleCasandra"/>
+    <bean class="com.datacradle.cassandra.test.hector.HectorDataCradleClient" name="hectorDataCradleClientTest"/>
 
     <bean class="com.datacradle.cassandra.test.CassandraTestConnection" id="cassandraTestConnection">
         <constructor-arg name="host" value="localhost"/>
