@@ -1,8 +1,8 @@
 package com.datacradle.cassandra.test;
 
 
-import org.apache.cassandra.thrift.Cassandra;
-import org.apache.cassandra.thrift.KsDef;
+import org.apache.cassandra.thrift.*;
+import org.apache.thrift.TException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Unit test for simple Application.
@@ -23,6 +25,7 @@ import java.io.IOException;
 public class ApplicationTest {
 
     private Application application;
+    public static final String DATACRADLE_KEYSPACE = "DataCradleSystem1111";
 
     @Autowired
     private CassandraTestConnection testConnection;
@@ -30,24 +33,21 @@ public class ApplicationTest {
     @Autowired
     private DataCradleCasandra dataCradleCasandra;
 
-    @Before
-    public void setUp() throws IOException {
-
-        dataCradleCasandra.startEmbeddedService(3);
-    }
 
     @Test
     public void testApp() throws Exception {
-        testConnection.open();
-        Cassandra.Client client = testConnection.getClient();
-        System.out.println("version " + client.describe_version());
-        System.out.println("partitioner"
-                + client.describe_partitioner());
-        System.out.println("cluster name " + client.describe_cluster_name());
-        for (KsDef keyspace : client.describe_keyspaces()) {
-            System.out.println("keyspace " + keyspace);
-        }
-        testConnection.close();
+            testConnection.open();
+            Cassandra.Client client = testConnection.getClient();
+
+//            String cql="CREATE keyspace test1 WITH strategy_options:DC1 = '1' AND replication_factor = '1' AND strategy_class = 'NetworkTopologyStrategy'";
+//            client.execute_cql_query(ByteBuffer.wrap(cql.getBytes()), Compression.NONE);
+
+            List<TokenRange> data= null;
+                data = client.describe_ring("test1");
+            for (TokenRange tokenRange : data) {
+                System.out.println(tokenRange.endpoints);
+            }
+            testConnection.close();
     }
 
 }

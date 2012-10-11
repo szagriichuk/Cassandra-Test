@@ -1,6 +1,7 @@
 package com.datacradle.cassandra.test.hector;
 
-import me.prettyprint.hector.api.Cluster;
+import com.datacradle.cassandra.test.DataCradleCasandra;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,18 @@ public class HectorDataCradleClientTest {
 
     @Autowired
     private HectorDataCradleClient hectorDataCradleClient;
+    @Autowired
+    private DataCradleCasandra dataCradleCasandra;
+
+//    @Before
+//    public void setUp() throws Exception {
+//        dataCradleCasandra.startEmbeddedService(1);
+//    }
 
     @Test
     public void testCreateSystemScheme() throws Exception {
-       hectorDataCradleClient.getDataCradleCluster("127.0.0.1", 7201);
+
+       hectorDataCradleClient.connectToDataCradleCluster("127.0.0.1", 9160);
 
        hectorDataCradleClient.createSystemKeySpace();
 

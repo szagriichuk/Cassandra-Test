@@ -9,7 +9,13 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.factory.HFactory;
+import org.apache.cassandra.thrift.TokenRange;
+import org.apache.cassandra.tools.NodeCmd;
+import org.apache.cassandra.tools.NodeProbe;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,10 +27,10 @@ import java.util.Set;
 public class HectorDataCradleClient {
 
     public static final String SYSTEM_KEYSPACE = "SystemKeyspace";
+    public static final String DATACRADLE_KEYSPACE = "DataCradleSystem";
     private Cluster cluster;
-    private Keyspace  keyspace;
 
-    public void getDataCradleCluster(String host, int port){
+    public void connectToDataCradleCluster(String host, int port){
         CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator();
         cassandraHostConfigurator.setHosts(host + ":" + port);
         cassandraHostConfigurator.setAutoDiscoverHosts(true);
@@ -32,17 +38,16 @@ public class HectorDataCradleClient {
     }
 
     public void createSystemKeySpace(){
-        keyspace = HFactory.createKeyspace(SYSTEM_KEYSPACE, cluster);
+        HFactory.createKeyspace(SYSTEM_KEYSPACE, cluster);
     }
 
-    public List<String> getDataCradleClusterHosts() {
+    public List<String> getDataCradleClusterHosts() throws IOException, InterruptedException {
 
-        Set<CassandraHost> hosts = cluster.getConnectionManager().getHosts();
-
+        List<TokenRange> hosts = cluster.describeRing(SYSTEM_KEYSPACE);
         List<String> resultList = new ArrayList<String>();
 
-        for (CassandraHost cassandraHost : hosts) {
-            resultList.add(cassandraHost.getIp() + " : " + cassandraHost.getPort());
+        for (TokenRange host : hosts) {
+            resultList.addAll(host.getEndpoints());
         }
 
         return resultList;
