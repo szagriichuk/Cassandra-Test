@@ -39,7 +39,8 @@ public class ApplicationTest {
             testConnection.open();
             Cassandra.Client client = testConnection.getClient();
 
-//            String cql="CREATE keyspace test1 WITH strategy_options:DC1 = '1' AND replication_factor = '1' AND strategy_class = 'NetworkTopologyStrategy'";
+//            String cql="CREATE KEYSPACE test1 WITH strategy_class = 'SimpleStrategy'\n" +
+//                    "    AND strategy_options:replication_factor = 1;";
 //            client.execute_cql_query(ByteBuffer.wrap(cql.getBytes()), Compression.NONE);
 
             List<TokenRange> data= null;
